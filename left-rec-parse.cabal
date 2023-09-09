@@ -1,0 +1,27 @@
+cabal-version:      3.0
+name:               left-rec-parse
+version:            0.1.0.0
+-- synopsis:
+-- description:
+license:            MIT
+license-file:       LICENSE
+author:             Joachim Breitner
+maintainer:         mail@joachim-breitner.de
+-- copyright:
+category:           Data
+build-type:         Simple
+extra-doc-files:    CHANGELOG.md
+-- extra-source-files:
+
+library
+    exposed-modules:  Parser
+    exposed-modules:  RParser
+    exposed-modules:  BNFEx
+    -- other-modules:
+    -- other-extensions:
+    build-depends:    base ^>=4.16.4.0
+    build-depends:    containers
+    build-depends:    mtl
+    build-depends:    array
+    hs-source-dirs:   .
+    default-language: GHC2021
