@@ -49,8 +49,10 @@ ruleRhs = pure <$> sq <* l (tok ';')
       <|> (:)  <$> sq <* l (tok '|') <*> ruleRhs
 rule :: P Rule
 rule = (,) <$> l ident <* l (tok ':' *> tok '=') <*> ruleRhs
+
 bnf :: P BNF
-bnf = liftA2 (:) rule bnf <|> pure []
+bnf = liftA2 (<>) bnf (pure <$> rule) -- NB: left-recursion
+  <|> pure <$> rule
 
 -- An example
 

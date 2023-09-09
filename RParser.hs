@@ -33,9 +33,8 @@ token = MkP P.token
 tok :: Eq tok => tok -> Parser tok tok
 tok t = MkP (P.tok t)
 
--- A thunk that knows its own identity
--- (observable sharing without any heap manipulation!)
-
+-- | A thunk that knows its own identity
+-- (a form of observable sharing without any heap manipulation/inspection!)
 propriocept :: (Unique -> a) -> a
 propriocept f = unsafePerformIO $ f <$> newUnique
 
