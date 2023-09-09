@@ -8,8 +8,8 @@ import Data.Maybe
 
 import qualified Parser as P
 
--- Data type wrapping the combinators lazily
-data Parser tok a = MkP { unP :: P.Parser Unique tok a }
+-- Newtype wrapper
+newtype Parser tok a = MkP { unP :: P.Parser Unique tok a }
 
 -- Eliminators
 
