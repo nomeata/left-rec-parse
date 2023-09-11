@@ -21,10 +21,13 @@ type BNF = [Rule]
 
 type P = Parser Char
 
+snoc :: [a] -> a -> [a]
+snoc xs x = xs ++ [x]
+
 l :: P a -> P a
--- l p = p <|> l p <* sat isSpace
+--l p = p <|> l p <* sat isSpace
 l p = p' where -- NB: Sharing!
-  p' = p <|> p' <* sat isSpace
+   p' = p <|> p' <* sat isSpace
 quote :: P Char
 quote = tok '\''
 quoted :: P a -> P a
@@ -42,17 +45,16 @@ sep :: P ()
 sep = void $ some (sat isSpace)
 sq :: P Seq
 sq = []   <$ eps
- <|> (:)  <$> atom <* sep <*> sq
+ <|> snoc <$> sq <* sep <*> atom
  <|> pure <$> atom
 ruleRhs :: P RuleRhs
-ruleRhs = pure <$> sq <* l (tok ';')
-      <|> (:)  <$> sq <* l (tok '|') <*> ruleRhs
+ruleRhs = pure <$> sq
+      <|> snoc <$> ruleRhs <* l (tok '|') <*> sq
 rule :: P Rule
-rule = (,) <$> l ident <* l (tok ':' *> tok '=') <*> ruleRhs
-
+rule = (,) <$> l ident <* l (tok ':' *> tok '=') <*> ruleRhs <* l (tok ';')
 bnf :: P BNF
-bnf = liftA2 (<>) bnf (pure <$> rule) -- NB: left-recursion
-  <|> pure <$> rule
+bnf = pure <$> rule
+  <|> snoc <$> bnf <*> rule
 
 -- An example
 
